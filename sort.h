@@ -1,7 +1,7 @@
 #ifndef _SORT_H_
 #define _SORT_H_
-#define SIZE 100000000 //10^8
-#define INITSIZE 100000001
+#define SIZE 1000000000 //10^9
+#define INITSIZE 1000000001
 #include<stdio.h>
 #include<pthread.h>
 
