@@ -1,25 +1,37 @@
 #include<stdio.h>
 #include<pthread.h>
-#include<sort.h>
-#define SIZE 100000
+#include<time.h>
+#include"sort.h"
 
-void testinit(int a[]);//生成数组
+int raworigin[INITSIZE], raw[INITSIZE], result[INITSIZE];//因为过大需要放在外面
+
+void testinit(int a[], int b[]);//生成数组
 void prt(int a[]);//打印数组
 void testresult(int a[]);//判断排序是否完成
+void ismatch(int a[], int b[]);//判断两个数组是否相等
 
 int main()
 {
-    //test程序
-    int raw[SIZE];
-    testinit(raw);
-    prt(raw);
-    int out[SIZE];
-    testresult(raw);
+    clock_t start, finish;
+    testinit(raworigin, raw);
+    start = clock();
+    MergeSort_SingleThread(raw, result);
+    finish = clock();
+    printf("Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
+    testresult(result);
 }
 
-void testinit(int a[])
+void testinit(int raworigin[], int raw[])
 {
-    for(int i = 1; i <= SIZE; ++i) a[i] = rand()%(SIZE+1);
+    if(raworigin[0] == 0) 
+    {
+        //srand((unsigned)time(NULL)); 不同电脑之间对比时先删去
+        for(int i = 1; i <= SIZE; ++i) raworigin[i] = raw[i] = rand()%(SIZE+1);
+    }
+    else 
+    {
+        for(int i = 1; i <= SIZE; ++i) raw[i] = raworigin[i];
+    }
 }
 
 void prt(int a[])
@@ -35,7 +47,8 @@ void prt(int a[])
             count = 0;
         }
     }
-    //printf("\n");
+    for(int i = 1; i <= 110; ++i) printf("-");
+    printf("\n");
 }
 
 void testresult(int a[])
@@ -51,4 +64,19 @@ void testresult(int a[])
     }
     if(flag == 0) printf("Success!\n");
     else printf("Failed!\n");
+}
+
+void ismatch(int a[], int b[])
+{
+    int temp = 0;
+    for(int i = 1; i <= SIZE; ++i)
+    {
+        if(a[i] != b[i])
+        {
+            temp = 1;
+            break;
+        }
+    }
+    if(temp == 0) printf("is match\n");
+    else printf("isn't match \n");
 }
