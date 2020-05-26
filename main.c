@@ -17,15 +17,24 @@ int main()
     start = clock();
     MergeSort_SingleThread(raw, result);
     finish = clock();
-    printf("Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
     testresult(result);
+    testinit(raworigin, result);
+    printf("MergeSort_SingleThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
+
+    testinit(raworigin, raw);
+    start = clock();
+    QuickSort_SingleThread(raw, result);
+    finish = clock();
+    testresult(result);
+    printf("QuickSort_SingleThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
+    
 }
 
 void testinit(int raworigin[], int raw[])
 {
     if(raworigin[0] == 0) 
     {
-        //srand((unsigned)time(NULL)); 不同电脑之间对比时先删去
+        srand((unsigned)time(NULL)); //不同电脑之间对比时先删去
         for(int i = 1; i <= SIZE; ++i) raworigin[i] = raw[i] = rand()%(SIZE+1);
     }
     else 
