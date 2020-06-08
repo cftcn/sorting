@@ -12,7 +12,18 @@ void ismatch(int a[], int b[]);//判断两个数组是否相等
 
 int main()
 {
+    GetSystemInfo();
     clock_t start, finish;
+    
+    testinit(raworigin, raw);
+    testinit(raworigin, result);
+    start = clock();
+    MergeSort_MultiThread(raw, result);
+    finish = clock();
+    testresult(result);
+    testinit(raworigin, result);
+    printf("MergeSort_MultiThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
+/*
     testinit(raworigin, raw);
     start = clock();
     MergeSort_SingleThread(raw, result);
@@ -25,9 +36,10 @@ int main()
     start = clock();
     QuickSort_SingleThread(raw, result);
     finish = clock();
+    prt(result);
     testresult(result);
     printf("QuickSort_SingleThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
-    
+    */
 }
 
 void testinit(int raworigin[], int raw[])

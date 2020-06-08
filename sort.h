@@ -1,20 +1,23 @@
 #ifndef _SORT_H_
 #define _SORT_H_
-
+/*
 #define SIZE 1000000000 //10^9
 #define INITSIZE 1000000001
-
+*/
 /*
 #define SIZE 100000000 //10^8
 #define INITSIZE 100000001
 */
-/*
-#define SIZE 5
-#define INITSIZE 6
-*/
+
+#define SIZE 100
+#define INITSIZE 101
+
 #include<stdio.h>
 #include<pthread.h>
+#include<unistd.h>
 
+
+void GetSystemInfo();
 void MergeSort_SingleThread(int raw[], int result[]);
 void QuickSort_SingleThread(int raw[], int result[]);
 void MergeSort_MultiThread(int raw[], int result[]);
@@ -24,5 +27,16 @@ void Merge(int raw[], int begin, int middle, int end, int result[]);
 void Copy(int des[], int ori[]);
 void QuickSort(int result[], int lo, int hi);
 int Partition(int result[], int lo, int hi);
+
+struct thread_data{
+   int thread_id;
+   int left;
+   int right;
+   int *a;
+   int *b;
+};
+
+int ThreadNumber;
+struct thread_data thread_data_array[16];
 
 #endif
