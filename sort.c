@@ -144,12 +144,81 @@ void MergeSort_MultiThread(int raw[], int result[])
 
 void QuickSort_MultiThread(int raw[], int result[])
 {
-
+    GetSystemInfo();
+    pthread_t threads[ThreadNumber];
+    int rc;
+    int part = SIZE/ThreadNumber;
+    for(int t = 0; t < ThreadNumber; t++)
+    {
+        thread_data_array[t].thread_id = t;
+        thread_data_array[t].left = part * t + 1;
+        if(t != ThreadNumber - 1)thread_data_array[t].right = part * (t + 1);
+        else thread_data_array[t].right = SIZE;
+        thread_data_array[t].a = raw;
+        rc = pthread_create(&threads[t], NULL, QuickSort_For_Multi, (void *) &thread_data_array[t]);
+        if (rc)
+        {
+            printf("ERROR; return code from pthread_create() is %d\n", rc);
+            exit(-1);
+        }
+    }
+    int number = ThreadNumber;
+    for(int i = 0; i < number; i++) pthread_join(threads[i], NULL);
+    for(int i = 1; i <= 4; ++i) 
+    {
+        if(i != 4)Merge_For_Multi(raw, part * (i - 1) * 2 + 1, part * (2 * i - 1) + 1, part * 2 * i + 1);
+        else Merge_For_Multi(raw, part * (i - 1) * 2 + 1, part * (2 * i - 1) + 1, SIZE + 1);
+    }
+    Merge_For_Multi(raw, 1, part * 2 + 1, part * 4 + 1);
+    Merge_For_Multi(raw, part * 4 + 1, part * 6 + 1, SIZE + 1);
+    Merge_For_Multi(raw, 1, part * 4 + 1, SIZE + 1);
 }
 
 void QuickSort_SingleThread(int raw[], int result[])
 {
     QuickSort(result, 1, SIZE);
+}
+
+void *QuickSort_For_Multi(void *threadarg)
+{
+    struct thread_data *my_data;
+    my_data = (struct thread_data *) threadarg;
+    int taskid = my_data->thread_id;
+    int left = my_data->left, right = my_data->right;
+    int *raw = my_data->a;
+    //QuickSort(raw, left, right);
+    sort(raw, left, right);
+    return NULL;
+}
+
+void swap(int a[],int il, int ir){
+	int temp=a[il];
+	a[il]=a[ir];
+	a[ir]=temp;
+}
+
+int partition(int a[],int left,int right)
+{
+	int i;i=rand()%(right-left+1);i+=left;
+	swap(a,i,left);
+	int temp=a[left];
+    while(left<right){
+        while(left<right&&a[right]>=temp) right--;
+        a[left]=a[right];
+        while(left<right&&a[left]<=temp) left++;
+        a[right]=a[left];
+    }
+    a[left]=temp;
+    return left;
+}
+
+void sort(int a[],int left,int right){
+	if(left>right){
+		return;
+	}
+	int pivot=partition(a,left,right);
+	sort(a,left,pivot-1);
+	sort(a,pivot+1,right);
 }
 
 void QuickSort(int result[], int lo, int hi)

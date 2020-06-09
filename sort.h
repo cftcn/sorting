@@ -1,17 +1,17 @@
 #ifndef _SORT_H_
 #define _SORT_H_
 
-/*
+
 #define SIZE 1000000000 //10^9
 #define INITSIZE 1000000001
-*/
-
-#define SIZE 100000000 //10^8
-#define INITSIZE 100000001
 
 /*
-#define SIZE 10000000 //10^7
-#define INITSIZE 10000001
+#define SIZE 100000000 //10^8
+#define INITSIZE 100000001
+*/
+/*
+#define SIZE 90000000 //10^7
+#define INITSIZE 90000001
 */
 /*
 #define SIZE 100
@@ -33,6 +33,12 @@ void Copy(int des[], int ori[]);
 void QuickSort(int result[], int lo, int hi);
 int Partition(int result[], int lo, int hi);
 void Merge_For_Multi(int a[],int low,int m,int high);
+void *QuickSort_For_Multi(void *threadarg);
+void *MergeSort(void *threadarg);
+
+int partition(int a[],int left,int right);
+void swap(int a[],int il, int ir);
+void sort(int a[],int left,int right);
 
 struct thread_data{
    int thread_id;

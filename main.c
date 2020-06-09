@@ -53,7 +53,7 @@ int main()
     Copy(raw, result);
     gettimeofday(&tv5,NULL);
 
-    MergeSort_SingleThread(raw, result);
+    QuickSort_SingleThread(raw, result);
     
     gettimeofday(&tv6,NULL);
     microseconds = (tv6.tv_sec - tv5.tv_sec) * 1000000 + ((int)tv6.tv_usec - (int)tv5.tv_usec);
@@ -68,20 +68,20 @@ int main()
     struct timeval tv7,tv8;
     gettimeofday(&tv7,NULL);
 
-    MergeSort_SingleThread(raw, result);
+    QuickSort_MultiThread(raw, result);
     
     gettimeofday(&tv8,NULL);
     microseconds = (tv8.tv_sec - tv7.tv_sec) * 1000000 + ((int)tv8.tv_usec - (int)tv7.tv_usec);
     printf("QuickSort_MultiThread Time:%lf s\n", microseconds/1000000.0);
 
-    testresult(result);
+    testresult(raw);
 }
 
 void testinit(int raworigin[], int raw[])
 {
     if(raworigin[0] == 0) 
     {
-        srand((unsigned)time(NULL)); //不同电脑之间对比时先删去
+        //srand((unsigned)time(NULL)); //不同电脑之间对比时先删去
         for(int i = 1; i <= SIZE; ++i) raworigin[i] = raw[i] = rand()%(SIZE+1);
     }
     else 
