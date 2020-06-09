@@ -13,33 +13,68 @@ void ismatch(int a[], int b[]);//判断两个数组是否相等
 int main()
 {
     GetSystemInfo();
+    //MergeSort_MultiThread
     clock_t start, finish;
     
     testinit(raworigin, raw);
     testinit(raworigin, result);
-    start = clock();
-    MergeSort_MultiThread(raw, result);
-    finish = clock();
-    testresult(result);
-    testinit(raworigin, result);
-    printf("MergeSort_MultiThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
-/*
-    testinit(raworigin, raw);
-    start = clock();
-    MergeSort_SingleThread(raw, result);
-    finish = clock();
-    testresult(result);
-    testinit(raworigin, result);
-    printf("MergeSort_SingleThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
 
+    struct timeval tv1,tv2;
+    gettimeofday(&tv1,NULL);
+
+    MergeSort_MultiThread(raw, result);
+
+    gettimeofday(&tv2,NULL);
+    int microseconds = (tv2.tv_sec - tv1.tv_sec) * 1000000 + ((int)tv2.tv_usec - (int)tv1.tv_usec);
+    printf("MergeSort_MultiThread Time:%lf s\n", microseconds/1000000.0);
+
+    testresult(raw);
+
+    //MergeSort_SingleThread
+    testinit(raworigin, result);
     testinit(raworigin, raw);
-    start = clock();
-    QuickSort_SingleThread(raw, result);
-    finish = clock();
-    prt(result);
+    
+    struct timeval tv3,tv4;
+    gettimeofday(&tv3,NULL);
+
+    MergeSort_SingleThread(raw, result);
+    
+    gettimeofday(&tv4,NULL);
+    microseconds = (tv4.tv_sec - tv3.tv_sec) * 1000000 + ((int)tv4.tv_usec - (int)tv3.tv_usec);
+    printf("MergeSort_SingleThread Time:%lf s\n", microseconds/1000000.0);
+
     testresult(result);
-    printf("QuickSort_SingleThread Time: %f s\n", (double)(finish-start)/CLOCKS_PER_SEC);
-    */
+
+    //QuickSort_SingleThread
+    testinit(raworigin, result);
+    testinit(raworigin, raw);
+    
+    struct timeval tv5,tv6;
+    Copy(raw, result);
+    gettimeofday(&tv5,NULL);
+
+    MergeSort_SingleThread(raw, result);
+    
+    gettimeofday(&tv6,NULL);
+    microseconds = (tv6.tv_sec - tv5.tv_sec) * 1000000 + ((int)tv6.tv_usec - (int)tv5.tv_usec);
+    printf("QuickSort_SingleThread Time:%lf s\n", microseconds/1000000.0);
+
+    testresult(result);
+
+    //QuickSort_MultiThread
+    testinit(raworigin, result);
+    testinit(raworigin, raw);
+    
+    struct timeval tv7,tv8;
+    gettimeofday(&tv7,NULL);
+
+    MergeSort_SingleThread(raw, result);
+    
+    gettimeofday(&tv8,NULL);
+    microseconds = (tv8.tv_sec - tv7.tv_sec) * 1000000 + ((int)tv8.tv_usec - (int)tv7.tv_usec);
+    printf("QuickSort_MultiThread Time:%lf s\n", microseconds/1000000.0);
+
+    testresult(result);
 }
 
 void testinit(int raworigin[], int raw[])
